@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Authors and Books</title>
+</head>
+<body>
+    <h1>Authors</h1>
+    <ul>
+        {% for author in authors %}
+        <li><a href="{{ url_for('author_detail', author_id=author.id) }}">{{ author.name }}</a>
+            <form action="{{ url_for('delete_author', author_id=author.id) }}" method="post" style="display: inline;">
+                <button type="submit">Delete Author</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Add Author</h2>
+    <form action="{{ url_for('add_author') }}" method="post">
+        <input type="text" name="name" placeholder="Author Name" required>
+        <button type="submit">Add Author</button>
+    </form>
+
+    <h2>Add Book</h2>
+    <form action="{{ url_for('add_book') }}" method="post">
+        <input type="text" name="title" placeholder="Book Title" required>
+        <select name="author_id" required>
+            {% for author in authors %}
+            <option value="{{ author.id }}">{{ author.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Add Book</button>
+    </form>
+</body>
+</html>

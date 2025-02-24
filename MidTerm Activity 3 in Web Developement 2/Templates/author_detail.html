@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ author.name }}</title>
+    <style>
+        .red-button {
+            background-color: red;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        .green-button {
+            background-color: green;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        .alert {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+        .alert-success {
+            color: #3c763d;
+            background-color: #dff0d8;
+            border-color: #d6e9c6;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ author.name }}</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <h2>Books:</h2>
+    <ul>
+        {% for book in author.books %}
+        <li>{{ book.title }}
+          <form action="{{ url_for('delete_book', book_id=book.id) }}" method="post" style="display: inline;">
+            <button type="submit" class="red-button">Delete Book</button>
+          </form>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Comments:</h2>
+    <ul>
+        {% for comment in author.comments %}
+        <li>{{ comment.text }}
+            <form action="{{ url_for('delete_comment', comment_id=comment.id, author_id=author.id) }}" method="post" style="display: inline;">
+                <button type="submit" class="red-button">Delete Comment</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <form method="POST" action="{{ url_for('add_comment', author_id=author.id) }}">
+        <label for="comment">Add Comment:</label><br>
+        <textarea name="comment" rows="4" cols="50" required></textarea><br>
+        <input type="submit" value="Add Comment" class="green-button">
+    </form>
+
+    <a href="{{ url_for('index') }}" class="red-button">Back to Authors</a>
+</body>
+</html>

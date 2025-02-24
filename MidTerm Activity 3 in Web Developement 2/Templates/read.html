@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Authors and Books</title>
+    <style>
+      .green-button {
+            background-color: green;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+      .red-button {
+            background-color: red;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+      .yellow-button {
+            background-color: yellow;
+            color: black;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+      .alert {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+      .alert-success {
+            color: #3c763d;
+            background-color: #dff0d8;
+            border-color: #d6e9c6;
+        }
+    </style>
+</head>
+<body>
+    <h1>Authors</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <ul>
+        {% for author in authors %}
+        <li><a href="{{ url_for('read_author', author_id=author.id) }}">{{ author.name }}</a>
+            <a href="{{ url_for('update_author', author_id=author.id) }}" class="yellow-button">Update</a>
+            <form action="{{ url_for('delete_author', author_id=author.id) }}" method="post" style="display: inline;">
+                <button type="submit" class="red-button">Delete</button>
+            </form>
+        </li>
+        <ul>
+            {% for book in author.books %}
+            <li>{{ book.title }}
+              <a href="{{ url_for('update_book', book_id=book.id) }}" class="yellow-button">Update</a>
+              <form action="{{ url_for('delete_book', book_id=book.id) }}" method="post" style="display: inline;">
+                <button type="submit" class="red-button">Delete Book</button>
+              </form>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('create_author') }}" class="green-button">Add Author</a>
+    <a href="{{ url_for('create_book') }}" class="green-button">Add Book</a>
+</body>
+</html>

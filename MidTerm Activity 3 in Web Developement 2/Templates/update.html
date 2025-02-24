@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update {{ type }}</title>
+    <style>
+        .green-button {
+            background-color: green;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Update {{ type }}</h1>
+    <form method="POST">
+        {% if type == 'Author' %}
+            <label for="name">Name:</label>
+            <input type="text" name="name" value="{{ author.name }}" required><br><br>
+        {% elif type == 'Book' %}
+            <label for="title">Title:</label>
+            <input type="text" name="title" value="{{ book.title }}" required><br><br>
+            <label for="author_id">Author:</label>
+            <select name="author_id" required>
+                {% for a in authors %}
+                    <option value="{{ a.id }}" {% if a.id == book.author_id %}selected{% endif %}>{{ a.name }}</option>
+                {% endfor %}
+            </select><br><br>
+        {% endif %}
+        <input type="submit" value="Update" class="green-button">
+    </form>
+    <a href="{{ url_for('index') }}">Back</a>
+</body>
+</html>
